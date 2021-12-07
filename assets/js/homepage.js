@@ -1,4 +1,5 @@
 // servers -  A server is a piece of hardware set up to provide resources to other devices (often called clients).
+// HTTP header - Allows the client and the server to pass additional information with an HTTP request or response. 
 
 // status code:
 // 200 status - the HTTP request was successful

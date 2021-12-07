@@ -1,6 +1,8 @@
 var issueContainerEl = document.querySelector("#issues-container");
+var limitWarningEl = document.querySelector("#limit-warning");
 
 var getRepoIssues = function(repo) {
+    // the ?direction=asc option reverses order to return oldest->newest, otherwise the order will be newest->oldest
     var apiUrl = "https://api.github.com/repos/" + repo + "/issues?direction=asc";
     
     fetch(apiUrl)
@@ -12,6 +14,11 @@ var getRepoIssues = function(repo) {
             
                 // pass response data to dom function
                 displayIssues(data);
+
+                // check if api has paginated issues
+                if (response.headers.get("Link")) {
+                    displayWarning(repo);
+                }
             });
         }
         else {
@@ -22,7 +29,7 @@ var getRepoIssues = function(repo) {
 };
 
 var displayIssues = function(issues) {
-    if (issueContainerEl === 0) {
+    if (issues.length === 0) {
         issueContainerEl.textContent = "This repo has no open issues!";
         return;
     }
@@ -60,6 +67,19 @@ var displayIssues = function(issues) {
         issueEl.appendChild(typeEl);
         issueContainerEl.appendChild(issueEl);
     }
+};
+
+var displayWarning = function(repo) {
+    
+    // add text to warning container
+    limitWarningEl.textContent = "To see more than 30 issues, visit ";
+    var linkEl = document.createElement("a");
+    linkEl.textContent = "See More Issues on Github.com";
+    linkEl.setAttribute("href", "https://github.com/" + repo + "issues");
+    linkEl.setAttribute("target", "_blank");
+
+    // append to warning container
+    limitWarningEl.appendChild(linkEl);
 };
 
 getRepoIssues("facebook/react");
