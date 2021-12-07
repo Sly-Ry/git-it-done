@@ -90,26 +90,26 @@ var getUserRepos = function(user){
     // fetch from app and a response came from GitHub's server.
     // make a request to the url
     fetch(apiUrl)
-        .then(function(response) {
+    .then(function(response) {
 
-            // an if statement in case of 404 status on username search
-            if (response.ok) {
+        // an if statement in case of 404 status on username search
+        if (response.ok) {
 
-                // json is used here, but sometimes "text() would be used if resources return non-json data"
-                response.json().then(function(data) {
-                    displayRepos(data, user);
-                });
-            }
-            else {
-                alert("Github User Not Found!");
-            }
-            // console.log("inside", response);
-        })
-        .catch(function(error) {
-            
-            // notice this '.catch()' getting chained onto the end of the '.then()' method
-            alert("Unable to connect to Github");
-        });
+            // json is used here, but sometimes "text() would be used if resources return non-json data"
+            response.json().then(function(data) {
+                displayRepos(data, user);
+            });
+        }
+        else {
+            alert("Github User Not Found!");
+        }
+        // console.log("inside", response);
+    })
+    .catch(function(error) {
+        
+        // notice this '.catch()' getting chained onto the end of the '.then()' method
+        alert("Unable to connect to Github");
+    });
     // console.log("outside");
 };
 
