@@ -1,5 +1,10 @@
 // servers -  A server is a piece of hardware set up to provide resources to other devices (often called clients).
 
+// status code:
+// 200 status - the HTTP request was successful
+// 400s status - the server received the HTTP request but is missing information
+// 500s status - an error with the server/possible lack of internet connection
+
 var userFormEl = document.querySelector("#user-form");
 var nameInputEl = document.querySelector("#username");
 var repoContainerEl = document.querySelector("#repo-container");
@@ -23,11 +28,19 @@ var formSubmitHandler = function(event) {
 };
 
 var displayRepos = function(repos, searchTerm) {
+    
+    // check if api returned any repos
+    if (repos.length === 0) {
+        repoContainerEl.textContent = "No repositories found.";
+        return;
+    }
+    
     // clear old content
     repoContainerEl.textContent = "";
     repoSearchTerm.textContent = searchTerm;
 
     for (var i = 0; i < repos.length; i++) {
+        
         // format repo name
         var repoName = repos[i].owner.login + "/" + repos[i].name;
 
@@ -76,15 +89,27 @@ var getUserRepos = function(user){
     
     // fetch from app and a response came from GitHub's server.
     // make a request to the url
-    fetch(apiUrl).then(function(response) {
-        
-        // json is used here, but sometimes "text() would be used if resources return non-json data"
-        response.json().then(function(data) {
-            displayRepos(data, user);
+    fetch(apiUrl)
+        .then(function(response) {
+
+            // an if statement in case of 404 status on username search
+            if (response.ok) {
+
+                // json is used here, but sometimes "text() would be used if resources return non-json data"
+                response.json().then(function(data) {
+                    displayRepos(data, user);
+                });
+            }
+            else {
+                alert("Github User Not Found!");
+            }
+            // console.log("inside", response);
+        })
+        .catch(function(error) {
+            
+            // notice this '.catch()' getting chained onto the end of the '.then()' method
+            alert("Unable to connect to Github");
         });
-        // console.log("inside", response);
-    });
-    
     // console.log("outside");
 };
 
