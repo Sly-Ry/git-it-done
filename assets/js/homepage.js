@@ -1,5 +1,7 @@
 // servers -  A server is a piece of hardware set up to provide resources to other devices (often called clients).
 // HTTP header - Allows the client and the server to pass additional information with an HTTP request or response. 
+// calling an API syntax - 'q=SEARCH_KEYWORD_1+SEARCH_KEYWORD_N+QUALIFIER_1+QUALIFIER_N'
+// 'q=javascript+html+css+is:featured'
 
 // status code:
 // 200 status - the HTTP request was successful
@@ -115,6 +117,22 @@ var getUserRepos = function(user){
         alert("Unable to connect to Github");
     });
     // console.log("outside");
+};
+var getFeaturedRepos = function(language) {
+    var apiUrl = "https://api.github.com/search/repositories?q=" + language + "+is:featured&sort=help-wanted-issues";
+
+    fetch(apiUrl)
+    .then(function(response) {
+        if (response.ok) {
+            response.json().then(function(data) {
+                
+                displayRepos(data.items, language);
+            });
+        }
+        else {
+            alert("Error: Github User Not Found");
+        }
+    });
 };
 
 userFormEl.addEventListener("submit", formSubmitHandler);

@@ -4,7 +4,7 @@ var repoNameEl = document.querySelector("#repo-name");
 
 var getRepoName = function() {
     
-    // grab repo name from url query string
+    // grab repo name from url query string using the 'location.search' method
     var queryString = document.location.search;
     var repoName = queryString.split("=")[1];
     
