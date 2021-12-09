@@ -13,7 +13,7 @@ var nameInputEl = document.querySelector("#username");
 var repoContainerEl = document.querySelector("#repo-container");
 var repoSearchTerm = document.querySelector("#repo-search-term");
 var languageButtonsEl = document.querySelector("div");
-languageButtonsEl.setAttribute("#language-buttons");
+languageButtonsEl.setAttribute("id", "language-buttons");
 
 var formSubmitHandler = function(event) {
     event.preventDefault();
@@ -121,6 +121,7 @@ var getUserRepos = function(user){
     // console.log("outside");
 };
 var getFeaturedRepos = function(language) {
+    // "featured&sort" - the '&' character separates parameters
     var apiUrl = "https://api.github.com/search/repositories?q=" + language + "+is:featured&sort=help-wanted-issues";
 
     fetch(apiUrl)
@@ -139,7 +140,12 @@ var getFeaturedRepos = function(language) {
 
 var buttonClickHandler = function(event) {
     var language = event.target.getAttribute("data-language");
-    console.log(language);
+    if(language) {
+        getFeaturedRepos(language);
+
+        // clear old content
+        repoContainerEl.textContent = "";
+    };
 };
 
 userFormEl.addEventListener("submit", formSubmitHandler);
